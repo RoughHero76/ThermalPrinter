@@ -9,7 +9,6 @@ async function printReceipt() {
                 timeout: 1000
             },
             width: 48, 
-            driver: 'epson'
 
             //ESPON TM-T82III-S/A
         });
