@@ -1,23 +1,22 @@
-const { ThermalPrinter, PrinterTypes } = require("node-thermal-printer");
+const { ThermalPrinter, PrinterTypes, printer } = require("node-thermal-printer");
 
 async function printReceipt() {
     try {
         const printer = new ThermalPrinter({
-            type: 'espon',
-            interface: 'COM2', 
+            type: PrinterTypes.EPSON, // Set your printer type
+            interface: 'printer:auto', // Replace with the correct USB port
+            driver: require('printer'),  // Use 'printer' as the driver for system printer
             options: {
                 timeout: 1000
             },
-            width: 48, 
-
-            //ESPON TM-T82III-S/A
+            width: 48,
+            
         });
 
         const isConnected = await printer.isPrinterConnected();
         if (!isConnected) {
             throw new Error("Printer is not connected");
         }
-        console.log("Printer is connected");
 
         printer.alignCenter();
         printer.println("Hello World!");
