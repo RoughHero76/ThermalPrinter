@@ -6,8 +6,8 @@ const usb = require('usb');
 function findPrinter() {
   const devices = usb.getDeviceList();
   const printer = devices.find(device => {
-    return device.deviceDescriptor.idVendor === 0x04b8 && // Epson vendor ID
-           device.deviceDescriptor.idProduct === 0x0e15;  // TM-T82III product ID
+    return device.deviceDescriptor.idVendor === 0x04B8 && // Epson vendor ID
+           device.deviceDescriptor.idProduct === 0x0E28;  // TM-T82III product ID
   });
   return printer;
 }
@@ -39,8 +39,10 @@ async function printReceipt() {
       .align('ct')
       .style('bu')
       .size(1, 1)
-      .text('Hello World!')
-      .text('Epson TM-T82III')
+      .text('Hello jay!')
+      .text('bhavesh')
+      .text('rajehs')
+      .text('faizan')
       .feed(1)
       .cut()
       .close();
