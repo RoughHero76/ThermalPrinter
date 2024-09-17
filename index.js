@@ -1,16 +1,14 @@
-const { ThermalPrinter, PrinterTypes, printer } = require("node-thermal-printer");
+const { ThermalPrinter, PrinterTypes } = require("node-thermal-printer");
 
 async function printReceipt() {
     try {
         const printer = new ThermalPrinter({
             type: PrinterTypes.EPSON, // Set your printer type
-            interface: 'printer:auto', // Replace with the correct USB port
-            driver: require('printer'),  // Use 'printer' as the driver for system printer
+            interface: '\\.\COM2', // Automatically select the system printer
             options: {
                 timeout: 1000
             },
-            width: 48,
-            
+            width: 48, // Set the width as per your printer's width (e.g., 48 for 48mm)
         });
 
         const isConnected = await printer.isPrinterConnected();
@@ -28,7 +26,7 @@ async function printReceipt() {
         printer.println("Right aligned text");
 
         printer.alignCenter();
-        printer.printImage('./logo.png'); // Replace with path to your logo
+        await printer.printImage('./logo.png'); // Replace with the path to your logo
 
         printer.cut();
 

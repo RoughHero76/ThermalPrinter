@@ -9,9 +9,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "node-gyp": "^10.2.0",
-    "node-pre-gyp": "^0.17.0",
+    "electron-printer": "^0.0.5",
     "node-thermal-printer": "^4.4.3",
     "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^3.2.9"
   }
 }
