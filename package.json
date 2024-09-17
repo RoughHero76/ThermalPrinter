@@ -9,7 +9,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "electron-printer": "^0.0.5",
     "node-thermal-printer": "^4.4.3",
     "nodemon": "^3.1.4"
   },
