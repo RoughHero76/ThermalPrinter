@@ -1,40 +1,54 @@
-const { ThermalPrinter, PrinterTypes } = require("node-thermal-printer");
+const escpos = require('escpos');
+escpos.USB = require('escpos-usb');
+const usb = require('usb');
+
+// Find Epson TM-T82III printer
+function findPrinter() {
+  const devices = usb.getDeviceList();
+  const printer = devices.find(device => {
+    return device.deviceDescriptor.idVendor === 0x04b8 && // Epson vendor ID
+           device.deviceDescriptor.idProduct === 0x0e15;  // TM-T82III product ID
+  });
+  return printer;
+}
 
 async function printReceipt() {
-    try {
-        const printer = new ThermalPrinter({
-            type: PrinterTypes.EPSON, // Set your printer type
-            interface: '\\.\COM2', // Automatically select the system printer
-            options: {
-                timeout: 1000
-            },
-            width: 48, // Set the width as per your printer's width (e.g., 48 for 48mm)
-        });
-
-        const isConnected = await printer.isPrinterConnected();
-        if (!isConnected) {
-            throw new Error("Printer is not connected");
-        }
-
-        printer.alignCenter();
-        printer.println("Hello World!");
-        printer.drawLine();
-
-        printer.alignLeft();
-        printer.println("Left aligned text");
-        printer.alignRight();
-        printer.println("Right aligned text");
-
-        printer.alignCenter();
-        await printer.printImage('./logo.png'); // Replace with the path to your logo
-
-        printer.cut();
-
-        await printer.execute();
-        console.log("Print success");
-    } catch (error) {
-        console.error("Print failed:", error);
+  try {
+    const device = findPrinter();
+    if (!device) {
+      throw new Error("Epson TM-T82III printer not found. Make sure it's connected and powered on.");
     }
+
+    const printer = new escpos.USB(device);
+    
+    const options = { encoding: "GB18030" /* or another encoding that supports your language */ }
+    const document = new escpos.Printer(printer, options);
+
+    await new Promise((resolve, reject) => {
+      printer.open((error) => {
+        if (error) {
+          reject(new Error(`Failed to open printer: ${error.message}`));
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    document
+      .font('a')
+      .align('ct')
+      .style('bu')
+      .size(1, 1)
+      .text('Hello World!')
+      .text('Epson TM-T82III')
+      .feed(1)
+      .cut()
+      .close();
+
+    console.log("Print job sent successfully");
+  } catch (error) {
+    console.error("Printing failed:", error);
+  }
 }
 
 printReceipt();
