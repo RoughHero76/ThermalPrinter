@@ -2,6 +2,16 @@ const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
 const usb = require('usb');
 
+
+
+
+
+
+
+////////zadig   download  win -lib32     link :      https://sourceforge.net/projects/libwdi/
+
+
+
 // Find Epson TM-T82III printer
 function findPrinter() {
   const devices = usb.getDeviceList();
